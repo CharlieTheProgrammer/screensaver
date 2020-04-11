@@ -1,7 +1,13 @@
-// Google Fonts
+// Fonts
 @import url(http://fonts.googleapis.com/css?family=Nunito:200,600);
 
-//
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+// Custom overrides
 html, body {
     background-color: #000;
     color: #636b6f;
@@ -19,7 +25,6 @@ html, body {
     align-items: center;
     display: flex;
     justify-content: center;
-    z-index: 2000;
 }
 
 .position-ref {
