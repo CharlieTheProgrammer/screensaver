@@ -23,29 +23,35 @@
 		</div>
 		<div class="flex-center position-ref full-height">
 			<div class="content">
-				<div class="title m-b-md text-white font-weight-bold">
-					Welcome User
-				</div>
-				<div class="h2 mb-3 text-white font-weight-bold">
-					What would you like to see today?
-				</div>
-				<form method="POST" action="/">
-					@csrf
-					<div class="form-group mb-2 d-flex justify-content-center">
-						<input class="form-control w-50" type="text" name="image_topic" id="image_topic" />
+				<div id="welcome-box">
+					<div class="title m-b-md text-white font-weight-bold">
+						Welcome User
 					</div>
-					<div><button class="btn btn-primary">Submit</button></div>
-				</form>
+					<div class="h2 mb-3 text-white font-weight-bold">
+						What would you like to see today?
+					</div>
+					<form method="POST" action="/">
+						@csrf
+						<div class="form-group mb-2 d-flex justify-content-center">
+							<input class="form-control w-50" type="text" name="image_topic" id="image_topic" />
+						</div>
+						<div><button class="btn btn-primary">Submit</button></div>
+					</form>
+				</div>
 
 				<div id="footer" class="fixed-bottom pb-2 text-light">
-					<div class="d-flex justify-content-between px-3">
-						<div class="d-flex align-items-center">
+					<table class="w-100">
+						<td style="width:33%" class="text-left pl-3">
 							<a class="cursor-on-hover" data-toggle="modal" data-target="#exampleModalCenter">
 								<i data-feather="settings"></i>
 							</a>
 							<span class="pl-2">Image name/location goes here</span>
-						</div>
-					</div>
+						</td>
+						<td class="text-center" style="width:33%">
+							<span class="badge glass cursor-on-hover"><i data-feather="more-horizontal" onclick="fadeMeOut('welcome-box')"></i></span>
+						</td>
+						<td style="width:33%"></td>
+					</table>
 				</div>
 			</div>
 		</div>
@@ -57,6 +63,10 @@
 		feather.replace();
 	</script>
 	<script>
+		function fadeMeOut(elementId) {
+			$('#' + elementId).fadeToggle();
+		}
+
 		function nextImage() {
 			return db.get('images')[0];
 		}
