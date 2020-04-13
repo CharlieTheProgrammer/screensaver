@@ -1,0 +1,17 @@
+.glass {
+    opacity: .7;
+    color: #fff;
+    background-color: #000;
+}
+
+.glass-font h1, .glass-font h2  {
+    font-weight: bold;
+}
+
+.cursor-on-hover {
+    cursor: pointer;
+}
+
+.glass .cursor-on-hover:hover {
+    background-color: #333;
+}
