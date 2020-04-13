@@ -45,18 +45,11 @@
     
                     <div id="footer" class="fixed-bottom pb-2 text-light">
                         <div class="d-flex justify-content-between px-3">
-                            <div>
-                                <a class="d-flex align-items-center" style="cursor: pointer;">
+                            <div class="d-flex align-items-center">
+                                <a class="cursor-on-hover" data-toggle="modal" data-target="#exampleModalCenter">
                                     <i data-feather="settings"></i>
-                                    <span class="pl-2"
-                                        >Image name/location goes here</span
-                                    >
                                 </a>
-                            </div>
-                            <div>
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-                                    Launch demo modal
-                                  </button>
+                                <span class="pl-2">Image name/location goes here</span>
                             </div>
                         </div>
                     </div>
