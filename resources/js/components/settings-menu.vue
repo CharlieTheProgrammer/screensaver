@@ -26,7 +26,10 @@
 								:key="option"
 							>
 								<div class="font-weight-bold">{{ option | ucFirst }}</div>
-								<div><input class="my-3" type="checkbox" :name="option" :id="option" v-model="data[option]" /></div>
+								<div class="custom-control custom-switch my-2">
+									<input type="checkbox" class="custom-control-input" :name="option" :id="option" v-model="display_options[option]"/>
+									<label class="custom-control-label" :for="option"></label>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -50,7 +53,7 @@ export default {
 	data() {
 		return {
 			options: ["links", "clock", "weather", "search", "focus"],
-			data: {}
+			display_options: {}
 		};
 	},
 	filters: {
@@ -59,13 +62,22 @@ export default {
 		}
 	},
 	mounted() {
+		let saved_display_options = db.get('display_options') || {};
 		this.options.map(option => {
-			Vue.set(this.data, option, false);
+			Vue.set(this.display_options, option, saved_display_options[option] || false);
 		});
 	},
 	methods: {
 		toggleOption(option) {
-			this.data[option] = !this.data[option];
+			this.display_options[option] = !this.display_options[option];
+		}
+	},
+	watch: {
+		display_options: {
+			handler(val) {
+				db.set('display_options', val);
+			},
+			deep: true
 		}
 	}
 };
