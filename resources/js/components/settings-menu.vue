@@ -1,11 +1,11 @@
 <template>
 	<!-- Modal -->
-	<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+	<div class="modal fade" id="settings-menu" tabindex="-1" role="dialog" aria-labelledby="settings-menu-title" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content glass glass-font">
 				<div class="modal-header d-none">
-					<h5 class="modal-title" id="exampleModalCenterTitle">
-						Modal title
+					<h5 class="modal-title" id="settings-menu-title">
+						Settings
 					</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
@@ -26,7 +26,32 @@
 								:key="option"
 							>
 								<div class="font-weight-bold">{{ option | ucFirst }}</div>
-								<div><input class="my-3" type="checkbox" :name="option" :id="option" v-model="data[option]" /></div>
+								<div class="custom-control custom-switch my-2">
+									<input type="checkbox" class="custom-control-input" :name="option" :id="option" v-model="display_options[option]" />
+									<label class="custom-control-label" :for="option"></label>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="mt-4">
+						<h2>Misc</h2>
+						<div class="container-fluid">
+							<div class="row justify-content-between align-items-center border-top border-bottom cursor-on-hover px-2 py-2">
+								<div class="col px-0">
+									<div class="font-weight-bold">Slideshow Delay</div>
+								</div>
+								<div class="col-5 col-md-3 px-0">
+									<input
+										class="form-control form-control-sm glass"
+										type="number"
+										:placeholder="display_options.slideshow_delay"
+										name="slideshow_delay"
+										id="slideshow_delay"
+										min="0"
+										step="1"
+										v-model="display_options.slideshow_delay"
+									/>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -50,7 +75,9 @@ export default {
 	data() {
 		return {
 			options: ["links", "clock", "weather", "search", "focus"],
-			data: {}
+			display_options: {
+				// slideshow_delay: 10000
+			}
 		};
 	},
 	filters: {
@@ -58,14 +85,24 @@ export default {
 			return _.upperFirst(string);
 		}
 	},
-	mounted() {
+	created() {
+		let saved_display_options = db.get("display_options") || {};
 		this.options.map(option => {
-			Vue.set(this.data, option, false);
+			Vue.set(this.display_options, option, saved_display_options[option] || false);
 		});
 	},
 	methods: {
 		toggleOption(option) {
-			this.data[option] = !this.data[option];
+			this.display_options[option] = !this.display_options[option];
+		}
+	},
+	watch: {
+		display_options: {
+			handler(val) {
+				db.set("display_options", val);
+				this.$emit("updateDisplayOptions", val);
+			},
+			deep: true
 		}
 	}
 };

@@ -18,100 +18,16 @@
 
 <body>
 	<div id="app">
-		<div id="settings-menu">
-			<settings-menu></settings-menu>
-		</div>
-		<div class="flex-center position-ref full-height">
-			<div class="content">
-				<div id="welcome-box">
-					<div class="title m-b-md text-white font-weight-bold">
-						Welcome User
-					</div>
-					<div class="h2 mb-3 text-white font-weight-bold">
-						What would you like to see today?
-					</div>
-					<form method="POST" action="/">
-						@csrf
-						<div class="form-group mb-2 d-flex justify-content-center">
-							<input class="form-control w-50" type="text" name="image_topic" id="image_topic" />
-						</div>
-						<div><button class="btn btn-primary">Submit</button></div>
-					</form>
-				</div>
-
-				<div id="footer" class="fixed-bottom pb-2 text-light">
-					<table class="w-100">
-						<td style="width:33%" class="text-left pl-3">
-							<a class="cursor-on-hover" data-toggle="modal" data-target="#exampleModalCenter">
-								<i data-feather="settings"></i>
-							</a>
-							<span class="pl-2">Image name/location goes here</span>
-						</td>
-						<td class="text-center" style="width:33%">
-							<span class="badge glass cursor-on-hover"><i data-feather="more-horizontal" onclick="fadeMeOut('welcome-box')"></i></span>
-						</td>
-						<td style="width:33%"></td>
-					</table>
-				</div>
-			</div>
-		</div>
+		<app :images='@json($images)'></app>
 	</div>
 
-	<script src="/js/app.js"></script>
 
+	<script src="/js/app.js"></script>
 	<script>
 		feather.replace();
 	</script>
 	<script>
-		function fadeMeOut(elementId) {
-			$('#' + elementId).fadeToggle();
-		}
-
-		function nextImage() {
-			return db.get('images')[0];
-		}
-
-		function removeImage() {
-			let updated_images = db.get('images').splice(0, 1);
-			db.set('images', updated_images);
-		}
-
-		$(function() {
-			var body = $("body");
-			body.css({
-				'background': 'url("/images/unsplash.jpg")',
-				"background-position": "50% 50%",
-				"background-repeat": "no-repeat",
-				"background-size": "cover",
-			});
-		});
-
-		// When we reload the pages, we will have an images array. If it's there store that to the db.
-		const images = @json($images);
-		if (images.length > 0) {
-			// Store images to local
-			db.set('images', images);
-
-			// Switch backgound functionalities
-			$(function() {
-				var body = $("body");
-				var backgrounds = images.map(image => {
-					return `url(${image.urls.regular})`;
-				});
-				var current = 0;
-
-				function nextBackground() {
-					body.css({
-						"background": backgrounds[current = ++current % backgrounds.length],
-						"background-position": "50% 50%",
-						"background-repeat": "no-repeat",
-						"background-size": "cover",
-					});
-					setTimeout(nextBackground, 5000);
-				}
-				setTimeout(nextBackground, 1000);
-			});
-		}
+		db.set('csrf', '{{ csrf_token() }}');
 	</script>
 </body>
 
