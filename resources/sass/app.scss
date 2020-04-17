@@ -61,3 +61,15 @@ html, body {
 .m-b-md {
     margin-bottom: 20px;
 }
+
+.top-right {
+    position: fixed;
+    right: 10px;
+    top: 10px;
+}
+
+.top-left {
+    position: fixed;
+    left: 10px;
+    top: 10px;
+}

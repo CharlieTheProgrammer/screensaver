@@ -25,7 +25,7 @@ Route::post('/', function(Request $request) {
         // Base URI is used with relative requests
         'base_uri' => 'https://api.unsplash.com',
         // You can set any number of default request options.
-        'timeout'  => 2.0,
+        'timeout'  => 5.0,
         'headers' => [
             'Accept-Version' => 'v1',
             'Accept'     => 'application/json',
