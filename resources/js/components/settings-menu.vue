@@ -19,16 +19,11 @@
 					<div>
 						<h2>Show</h2>
 						<div class="container-fluid">
-							<div
-								class="row justify-content-between align-items-center border-top border-bottom cursor-on-hover px-2"
-								@click="toggleOption(option)"
-								v-for="option in options"
-								:key="option"
-							>
-								<div class="font-weight-bold">{{ option | ucFirst }}</div>
+							<div class="row justify-content-between align-items-center border-top border-bottom cursor-on-hover px-2" @click="toggleOption('clock')">
+								<div class="font-weight-bold">Clock</div>
 								<div class="custom-control custom-switch my-2">
-									<input type="checkbox" class="custom-control-input" :name="option" :id="option" v-model="display_options[option]" />
-									<label class="custom-control-label" :for="option"></label>
+									<input type="checkbox" class="custom-control-input" name="clock" id="clock" v-model="appData.clock.is_enabled" />
+									<label class="custom-control-label" for="clock"></label>
 								</div>
 							</div>
 						</div>
@@ -38,18 +33,21 @@
 						<div class="container-fluid">
 							<div class="row justify-content-between align-items-center border-top border-bottom cursor-on-hover px-2 py-2">
 								<div class="col px-0">
-									<div class="font-weight-bold">Slideshow Delay</div>
+									<div class="font-weight-bold">
+										Slideshow Delay <span><small>(Seconds)</small></span>
+									</div>
 								</div>
 								<div class="col-5 col-md-3 px-0">
 									<input
 										class="form-control form-control-sm glass"
 										type="number"
-										:placeholder="display_options.slideshow_delay"
+										:placeholder="slideshowDelayInSeconds"
 										name="slideshow_delay"
 										id="slideshow_delay"
 										min="0"
 										step="1"
-										v-model="display_options.slideshow_delay"
+										@input="evt => $emit('updateSlideshowDelay', evt.target.value * 1000)"
+										value="slideshowDelayInSeconds"
 									/>
 								</div>
 							</div>
@@ -72,37 +70,18 @@
 <script>
 export default {
 	name: "settings-menu",
-	data() {
-		return {
-			options: ["links", "clock", "weather", "search", "focus"],
-			display_options: {
-				// slideshow_delay: 10000
-			}
-		};
-	},
-	filters: {
-		ucFirst(string) {
-			return _.upperFirst(string);
+	props: ["appData"],
+	computed: {
+		options() {
+			return Object.keys(this.displayOptions || {});
+		},
+		slideshowDelayInSeconds() {
+			return Math.round(this.appData.misc.slideshow_delay / 1000);
 		}
-	},
-	created() {
-		let saved_display_options = db.get("display_options") || {};
-		this.options.map(option => {
-			Vue.set(this.display_options, option, saved_display_options[option] || false);
-		});
 	},
 	methods: {
 		toggleOption(option) {
-			this.display_options[option] = !this.display_options[option];
-		}
-	},
-	watch: {
-		display_options: {
-			handler(val) {
-				db.set("display_options", val);
-				this.$emit("updateDisplayOptions", val);
-			},
-			deep: true
+			this.app_data[option] = !this.app_data[option].is_enabled;
 		}
 	}
 };

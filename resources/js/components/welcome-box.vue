@@ -1,7 +1,7 @@
 <template>
 	<div id="welcome-box">
 		<div class="title m-b-md font-weight-bold">
-			Welcome User
+			Welcome!
 		</div>
 		<div class="h2 mb-3 font-weight-bold">
 			What would you like to see today?
