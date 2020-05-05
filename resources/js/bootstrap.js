@@ -23,4 +23,7 @@ try {
 
 window.axios = require('axios');
 
+window.axios.defaults.baseURL= 'https://api.unsplash.com';
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.defaults.headers.common['Accept-Version'] = 'v1';
+window.axios.defaults.headers.common['Authorization'] = 'Client-ID '  + process.env.MIX_UNSPLASH_KEY;

@@ -19,7 +19,7 @@
 					<div>
 						<h2>Show</h2>
 						<div class="container-fluid">
-							<div class="row justify-content-between align-items-center border-top border-bottom cursor-on-hover px-2" @click="toggleOption('clock')">
+							<div class="row justify-content-between align-items-center border-top border-bottom cursor-on-hover px-2" >
 								<div class="font-weight-bold">Clock</div>
 								<div class="custom-control custom-switch my-2">
 									<input type="checkbox" class="custom-control-input" name="clock" id="clock" v-model="appData.clock.is_enabled" />
@@ -77,11 +77,6 @@ export default {
 		},
 		slideshowDelayInSeconds() {
 			return Math.round(this.appData.misc.slideshow_delay / 1000);
-		}
-	},
-	methods: {
-		toggleOption(option) {
-			this.app_data[option] = !this.app_data[option].is_enabled;
 		}
 	}
 };

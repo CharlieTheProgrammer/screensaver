@@ -5,7 +5,7 @@
 		</div>
 		<div class="flex-center position-ref full-height">
 			<div class="content">
-				<welcome-box></welcome-box>
+				<welcome-box @fetchImages="search_term => fetchImages(search_term)"></welcome-box>
 				<clock class="top-right" v-if="app_data.clock.is_enabled"></clock>
 
 				<div id="footer" class="fixed-bottom pb-2 text-light">
@@ -29,42 +29,30 @@
 
 <script>
 export default {
-	props: {
-		images: {
-			type: Array,
-			default: []
-		}
-	},
 	data() {
 		return {
 			app_data: {},
-			current_image: {}
+			images: [],
+			current_image: {},
+			total_pages: 0,
+			interval: 0,
 		};
 	},
 	created() {
 		this.initAppData();
 
-		// Set default image
-		$("body").css({
-			background: 'url("/images/unsplash.jpg")',
-			"background-position": "50% 50%",
-			"background-repeat": "no-repeat",
-			"background-size": "cover"
-		});
-
-		if (this.images.length > 0) {
-			// Store images
-			db.set("images", this.images);
-
-			// Start loop to go over the images
-			let current_image_index = 0;
-			setInterval(() => {
-				this.current_image = this.images[(current_image_index = ++current_image_index % this.images.length)];
-				this.setBackgroundImage(this.current_image);
-			}, this.app_data.misc.slideshow_delay);
-			
-			// Set the first image immediately
-			this.setBackgroundImage(this.images[(current_image_index = ++current_image_index % this.images.length)]);
+		const images = db.get("images");
+		if (images.length > 0) {
+			this.images = images;
+			this.runImagesLoop();
+		} else {
+			// Set default image
+			$("body").css({
+				background: 'url("/images/unsplash.jpg")',
+				"background-position": "50% 50%",
+				"background-repeat": "no-repeat",
+				"background-size": "cover"
+			});
 		}
 
 		this.welcomeBoxFadeEffects();
@@ -144,6 +132,36 @@ export default {
 					}
 				}
 			});
+		},
+		fetchImages(search_term) {
+			axios
+				// I'm limited to 30 per page regardless if I increase the per_page parameter.
+				.get(`/search/photos?query=${search_term}&per_page=30`)
+				.then(({ data }) => {
+					this.total_pages = data.total_pages;
+					this.images = _.shuffle(data.results);
+					if (this.interval) clearInterval(this.interval);
+					this.runImagesLoop();
+				})
+				.catch(err => {
+					console.log(err);
+				});
+		},
+		runImagesLoop() {
+			if (this.images.length > 0) {
+				// Store images
+				db.set("images", this.images);
+
+				// Start loop to go over the images
+				let current_image_index = 0;
+				this.interval = setInterval(() => {
+					this.current_image = this.images[(current_image_index = ++current_image_index % this.images.length)];
+					this.setBackgroundImage(this.current_image);
+				}, this.app_data.misc.slideshow_delay);
+
+				// Set the first image immediately
+				this.setBackgroundImage(this.images[(current_image_index = ++current_image_index % this.images.length)]);
+			}
 		}
 	},
 	watch: {
