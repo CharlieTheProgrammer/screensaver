@@ -18,16 +18,13 @@
 
 <body>
 	<div id="app">
-		<app :images='@json($images)'></app>
+		<app></app>
 	</div>
 
 
 	<script src="/js/app.js"></script>
 	<script>
 		feather.replace();
-	</script>
-	<script>
-		db.set('csrf', '{{ csrf_token() }}');
 	</script>
 </body>
 

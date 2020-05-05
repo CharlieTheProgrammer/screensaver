@@ -6,12 +6,11 @@
 		<div class="h2 mb-3 font-weight-bold">
 			What would you like to see today?
 		</div>
-		<form method="POST" action="/">
-			<input id="csrf-token" name="_token" type="hidden" :value="csrf_token" />
+		<form @submit.prevent="handleSubmit">
 			<div class="form-group mb-2 d-flex justify-content-center">
-				<input class="form-control w-50" type="text" name="image_topic" id="image_topic" />
+				<input class="form-control w-50" type="text" name="image_topic" id="image_topic" v-model="search_term" />
 			</div>
-			<div><button class="btn btn-primary">Submit</button></div>
+			<div><button type="button" class="btn btn-primary" @click="handleSubmit">Submit</button></div>
 		</form>
 	</div>
 </template>
@@ -20,8 +19,13 @@
 export default {
 	data() {
 		return {
-			csrf_token: db.get("csrf")
+			search_term: ""
 		};
+	},
+	methods: {
+		handleSubmit() {
+			this.$emit('fetchImages', this.search_term)
+		}
 	}
 };
 </script>
