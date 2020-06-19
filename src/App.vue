@@ -40,7 +40,8 @@ export default {
 	},
 	created() {
 		this.initAppData();
-    setTimeout(() => feather.replace(), 500);
+		setTimeout(() => feather.replace(), 500);
+		
 		const images = db.get("images");
 		if (images && images.length > 0) {
 			this.images = images;
